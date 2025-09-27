@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Packer Tool</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #504d3a;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            background-color: #00000099;
+            padding: 10px;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100dvh - 44.5px);
+            color: #2e2d21;
+            font-size: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div>💎 Image Packer</div>
+        <div>
+            <button id="dl_atlas" disabled>下載 Atlas</button>
+            <button id="dl_json" disabled>下載 JSON</button>
+            <button id="sample" disabled>下載範例</button>
+        </div>
+    </nav>
+    <main>
+        <div>Drop Images Here</div>
+    </main>
+    <script src='packer.js'></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

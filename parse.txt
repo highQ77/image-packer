@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BinPackParser</title>
+</head>
+
+<body>
+    <script>
+        class AtlasImg extends HTMLElement {
+            static observedAttributes = ['atlas', 'json', 'name']
+            atlas_url = ''
+            static frames_json = []
+            json_src = ''
+            frame_name = ''
+            constructor() {
+                super()
+                const shadowRoot = this.attachShadow({ mode: "open" })
+            }
+            set atlas(v) {
+                this.atlas_url = v
+                this.render()
+            }
+            set json(v) {
+                let exist = AtlasImg.frames_json.filter(item => item.src == v)
+                if (exist.length == 0) {
+                    this.json_src = v
+                    fetch(v).then(r => r.json()).then(r => {
+                        AtlasImg.frames_json.push({ src: v, result: r })
+                        this.render()
+                    })
+                } else {
+                    this.json_src = v
+                    this.render()
+                }
+            }
+            set name(v) {
+                this.frame_name = v
+                this.render()
+            }
+
+            attributeChangedCallback(name, oldV, newV) {
+                this[name] = newV
+            }
+
+            render() {
+                if (this.atlas_url || AtlasImg.frames_json || this.frame_name) {
+                    let frameInfo = AtlasImg.frames_json.filter(item => item.src == this.json_src)[0]
+                    if (frameInfo) {
+                        let info = frameInfo.result[this.frame_name]
+                        if (info) {
+                            let { x, y, w, h, isRotate } = info
+                            let div = document.createElement('div')
+                            div.style.backgroundImage = 'url(' + this.atlas_url + ')'
+                            div.style.width = w + 'px'
+                            div.style.height = h + 'px'
+                            div.style.backgroundPosition = (-x) + 'px ' + (-y) + 'px'
+                            let wrapper = document.createElement('div')
+                            if (isRotate) {
+                                wrapper.style.width = h + 'px'
+                                wrapper.style.height = w + 'px'
+                                div.style.transformOrigin = '0 0'
+                                div.style.transform = 'rotate(-90deg) translate(' + (-w) + 'px, 0px)'
+                            } else {
+                                wrapper.style.width = w + 'px'
+                                wrapper.style.height = h + 'px'
+                            }
+                            wrapper.append(div)
+                            this.shadowRoot.innerHTML = wrapper.outerHTML
+                        }
+                    }
+                }
+            }
+        }
+        customElements.define('atlas-img', AtlasImg)
+    </script>
+    <atlas-img atlas="atlas.png" json="atlas.json" name="1.png"></atlas-img>
+    <atlas-img atlas="atlas.png" json="atlas.json" name="3.png" /></atlas-img>
+    <atlas-img atlas="atlas.png" json="atlas.json" name="a.png" /></atlas-img>
+</body>
+
+</html>
