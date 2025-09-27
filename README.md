@@ -5,5 +5,7 @@ bin-packer for image store
 
 這邊提供生成圖集的方式，同時也有實際運用圖集的範例參考
 
+[demo site](https://highq77.github.io/image-packer/)
+
 ![圖片](./atlas.png)
 
